@@ -1,45 +1,47 @@
 (function($) {
-	'use strict';
 
-	function reorder(table, colCount) {
-		var $table;
-		var $cells;
-		var $cell;
-		var $trs;
-		var $newRow;
-		var cellsCount;
-		var row, col;
-		var next, prev;
+'use strict';
 
-		$table = $(table);
-		$trs = $table.find('tr');
-		$cells = $table.find('td');
-		cellsCount = $cells.length;
+function reorder(table, colCount) {
+  var $table;
+  var $cells;
+  var $cell;
+  var $trs;
+  var $newRow;
+  var cellsCount;
+  var row, col;
+  var next, prev;
 
-		prev = {colCount: (cellsCount / $trs.length), rowCount: $trs.length};
-		next = {colCount: colCount, rowCount: (cellsCount / colCount)};
+  $table = $(table);
+  $trs = $table.find('tr');
+  $cells = $table.find('td');
+  cellsCount = $cells.length;
 
-		if (next.rowCount > prev.rowCount) {
-			for (row = 0; row < next.rowCount; row++) {
-				$newRow = $('<tr></tr>');
-				$trs.last().after($newRow);
-				$trs = $trs.add($newRow);
-			}
-		}
+  prev = {colCount: (cellsCount / $trs.length), rowCount: $trs.length};
+  next = {colCount: colCount, rowCount: (cellsCount / colCount)};
 
-		for (row = 0; row < next.rowCount; row++) {
-			for (col = 0; col < next.colCount; col++) {
-				$cell = $cells.eq(row * next.colCount + col);
-				$cell.appendTo($trs.get(row));
-			}
-		}
+  if (next.rowCount > prev.rowCount) {
+    for (row = 0; row < next.rowCount; row++) {
+      $newRow = $('<tr></tr>');
+      $trs.last().after($newRow);
+      $trs = $trs.add($newRow);
+    }
+  }
 
-		$trs.filter(':empty').remove();
-	}
+  for (row = 0; row < next.rowCount; row++) {
+    for (col = 0; col < next.colCount; col++) {
+      $cell = $cells.eq(row * next.colCount + col);
+      $cell.appendTo($trs.get(row));
+    }
+  }
 
-	$.fn.cols = function(colCount) {
-		return $(this).each(function() {
-			reorder(this, colCount);
-		});
-	};
+  $trs.filter(':empty').remove();
+}
+
+$.fn.cols = function(colCount) {
+  return $(this).each(function() {
+    reorder(this, colCount);
+  });
+};
+
 }(jQuery));
